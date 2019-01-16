@@ -14,8 +14,8 @@ class Robodirs3arch(object):
         self.wordlist = wordlist
         self.results_path = results_path
         results_mount = Mount("/dirs3arch_results", self.results_path, type="bind")
-        #self.url = [str(self.url)]
-        mounts = [results_mount]
-        command = '-u {0} -e {1} -w {2} --json-report=/dirs3arch_results/dirs3arch_{0}_results.json'.format(self.url, self.extensions, self.wordlist)
+        wordlist_mount = Mount("/wordlist.txt", self.wordlist, type="bind")
+        mounts = [results_mount, wordlist_mount]
+        command = '-u {0} -e {1} -w {2} --json-report=/dirs3arch_results/dirs3arch_results.json'.format(self.url, self.extensions, '/wordlist.txt')
         self.client.containers.run(self.dirs3arch_docker, mounts=mounts, command=command)
-        logger.info("Successfully ran dirs3arch against the target URL {0}. Please find the *.json output in the results directory".format(self.url))
+        logger.trace("Successfully ran dirs3arch against the target URL {0}. Please find the *.json output in the results directory".format(self.url))
